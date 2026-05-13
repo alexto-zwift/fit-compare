@@ -11,9 +11,16 @@ def login():
     if session.get('access_token'):
         return redirect(url_for('dashboard.dashboard'))
 
-    # Build the Strava OAuth URL dynamically
+    # Build the Strava OAuth URL dynamically.
+    # Prefer request host so preview/prod Vercel domains both work without env drift.
     client_id = current_app.config.get('STRAVA_CLIENT_ID')
-    redirect_uri = current_app.config.get('STRAVA_REDIRECT_URI')
+    configured_redirect_uri = current_app.config.get('STRAVA_REDIRECT_URI')
+    request_base = request.url_root.rstrip('/')
+    redirect_uri = configured_redirect_uri or f"{request_base}{url_for('auth.callback')}"
+
+    # If running on Vercel, always use current host callback to avoid cross-domain session issues.
+    if request.host.endswith('.vercel.app'):
+        redirect_uri = f"{request_base}{url_for('auth.callback')}"
     
     if not client_id:
         return "Error: STRAVA_CLIENT_ID not configured. Please check your .env file.", 400
@@ -25,6 +32,9 @@ def login():
         'approval_prompt': 'auto',
         'scope': 'profile:read_all,activity:read_all'
     }
+
+    # Persist redirect_uri so token exchange uses the same value Strava received.
+    session['oauth_redirect_uri'] = redirect_uri
     
     strava_auth_url = f"https://www.strava.com/oauth/authorize?{urlencode(params)}"
     return redirect(strava_auth_url)
@@ -40,10 +50,17 @@ def callback():
         flash('Missing authorization code from Strava.', 'danger')
         return redirect(url_for('home'))
 
+    redirect_uri = (
+        session.get('oauth_redirect_uri')
+        or current_app.config.get('STRAVA_REDIRECT_URI')
+        or f"{request.url_root.rstrip('/')}{url_for('auth.callback')}"
+    )
+
     token_response = requests.post(current_app.config['STRAVA_TOKEN_URL'], data={
         'client_id': current_app.config['STRAVA_CLIENT_ID'],
         'client_secret': current_app.config['STRAVA_CLIENT_SECRET'],
         'code': code,
+        'redirect_uri': redirect_uri,
         'grant_type': 'authorization_code'
     })
 
@@ -63,4 +80,5 @@ def callback():
     session['access_token'] = access_token
     session['refresh_token'] = token_data.get('refresh_token')
     session['expires_at'] = token_data.get('expires_at')
+    session.pop('oauth_redirect_uri', None)
     return redirect(url_for('dashboard.dashboard'))
