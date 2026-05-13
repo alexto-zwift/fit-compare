@@ -3,9 +3,11 @@ from routes.auth import auth_bp
 from routes.dashboard import dashboard_bp
 from routes.profile import profile_bp
 from config import Config
+from datetime import timedelta
 
 app = Flask(__name__)
 app.config.from_object(Config)
+app.permanent_session_lifetime = timedelta(days=7)
 
 # Registering the routes
 app.register_blueprint(auth_bp)

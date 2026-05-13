@@ -35,5 +35,7 @@ def callback():
         'grant_type': 'authorization_code'
     })
     token_data = token_response.json()
+    session.permanent = True
     session['access_token'] = token_data.get('access_token')
-    return redirect(url_for('dashboard'))
+    session['refresh_token'] = token_data.get('refresh_token')
+    return redirect(url_for('dashboard.dashboard'))
