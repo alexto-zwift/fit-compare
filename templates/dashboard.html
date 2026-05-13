@@ -27,7 +27,7 @@
                             <li>
                                 <strong>{{ activity.name }}</strong> - {{ activity.distance }} meters
                                 <br>
-                                Date: {{ activity.start_date | date('Y-m-d H:i') }}
+                                Date: {{ activity.start_date[:16] | replace('T', ' ') if activity.start_date else 'N/A' }}
                             </li>
                         {% endfor %}
                     </ul>
