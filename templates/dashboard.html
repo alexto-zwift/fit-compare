@@ -22,12 +22,55 @@
             <section>
                 <h2>Your Activities</h2>
                 {% if activities %}
-                    <ul>
+                    <ul class="activity-list">
                         {% for activity in activities %}
-                            <li>
-                                <strong>{{ activity.name }}</strong> - {{ activity.distance }} meters
-                                <br>
-                                Date: {{ activity.start_date[:16] | replace('T', ' ') if activity.start_date else 'N/A' }}
+                            <li class="activity-item">
+                                <details class="activity-details">
+                                    <summary>
+                                        <span class="activity-title">{{ activity.name }}</span>
+                                        <span class="activity-meta">
+                                            {{ activity.distance | round(0) if activity.distance else 0 }} m
+                                            | {{ activity.start_date[:16] | replace('T', ' ') if activity.start_date else 'N/A' }}
+                                        </span>
+                                    </summary>
+
+                                    <div class="activity-metrics">
+                                        <div class="metric-row">
+                                            <span class="metric-label">Average HR</span>
+                                            <span class="metric-value">{{ activity.average_heartrate | round(0) if activity.average_heartrate else 'N/A' }}{% if activity.average_heartrate %} bpm{% endif %}</span>
+                                        </div>
+                                        <div class="metric-row">
+                                            <span class="metric-label">Average Speed</span>
+                                            <span class="metric-value">
+                                                {% if activity.average_speed %}
+                                                    {{ (activity.average_speed * 3.6) | round(1) }} km/h
+                                                {% else %}
+                                                    N/A
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                        <div class="metric-row">
+                                            <span class="metric-label">Average Power</span>
+                                            <span class="metric-value">{{ activity.average_watts | round(0) if activity.average_watts else 'N/A' }}{% if activity.average_watts %} W{% endif %}</span>
+                                        </div>
+                                        <div class="metric-row">
+                                            <span class="metric-label">Calories</span>
+                                            <span class="metric-value">
+                                                {% if activity.calories %}
+                                                    {{ activity.calories | round(0) }} kcal
+                                                {% elif activity.kilojoules %}
+                                                    {{ activity.kilojoules | round(0) }} kcal
+                                                {% else %}
+                                                    N/A
+                                                {% endif %}
+                                            </span>
+                                        </div>
+                                        <div class="metric-row">
+                                            <span class="metric-label">Temperature</span>
+                                            <span class="metric-value">{{ activity.average_temp | round(0) if activity.average_temp else 'N/A' }}{% if activity.average_temp %} C{% endif %}</span>
+                                        </div>
+                                    </div>
+                                </details>
                             </li>
                         {% endfor %}
                     </ul>

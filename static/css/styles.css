@@ -118,3 +118,58 @@ section p {
 .btn:hover {
     background: #35424a;
 }
+
+.activity-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.activity-item {
+    margin-bottom: 12px;
+}
+
+.activity-details {
+    border: 1px solid #d7d7d7;
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+.activity-details summary {
+    cursor: pointer;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.activity-title {
+    font-weight: 700;
+    color: #35424a;
+}
+
+.activity-meta {
+    color: #666;
+    font-size: 14px;
+}
+
+.activity-metrics {
+    border-top: 1px solid #e6e6e6;
+    padding: 10px 14px 12px;
+}
+
+.metric-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 0;
+}
+
+.metric-label {
+    color: #4b4b4b;
+}
+
+.metric-value {
+    font-weight: 600;
+    color: #222;
+}
