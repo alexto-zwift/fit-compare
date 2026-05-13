@@ -14,7 +14,7 @@ def dashboard():
     user_activities = get_user_activities()
     
     if user_profile is None or user_activities is None:
-        flash('Error retrieving data from Strava. Please try again later.', 'danger')
-        return redirect(url_for('auth.login'))
+        flash('Logged in, but unable to load Strava data right now. Please try again shortly.', 'warning')
+        return render_template('dashboard.html', profile={}, activities=[])
 
     return render_template('dashboard.html', profile=user_profile, activities=user_activities)

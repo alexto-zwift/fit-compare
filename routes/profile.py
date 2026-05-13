@@ -12,6 +12,6 @@ def profile():
     
     user_info = get_user_profile()
     if user_info is None:
-        flash("Unable to fetch user profile information.", "danger")
-        return redirect(url_for('auth.login'))
+        flash("Logged in, but unable to fetch profile information right now.", "warning")
+        return render_template("profile.html", user={})
     return render_template("profile.html", user=user_info)

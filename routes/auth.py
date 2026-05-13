@@ -7,6 +7,10 @@ auth_bp = Blueprint('auth', __name__)
 
 @auth_bp.route('/login')
 def login():
+    # If user is already authenticated in this session, avoid forcing OAuth again.
+    if session.get('access_token'):
+        return redirect(url_for('dashboard.dashboard'))
+
     # Build the Strava OAuth URL dynamically
     client_id = current_app.config.get('STRAVA_CLIENT_ID')
     redirect_uri = current_app.config.get('STRAVA_REDIRECT_URI')
@@ -58,4 +62,5 @@ def callback():
     session.permanent = True
     session['access_token'] = access_token
     session['refresh_token'] = token_data.get('refresh_token')
+    session['expires_at'] = token_data.get('expires_at')
     return redirect(url_for('dashboard.dashboard'))
