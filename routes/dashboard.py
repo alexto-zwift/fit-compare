@@ -11,7 +11,7 @@ def dashboard():
         return redirect(url_for('auth.login'))
     
     user_profile = get_user_profile()
-    user_activities = get_user_activities()
+    user_activities = get_user_activities(user_profile=user_profile)
     
     if user_profile is None or user_activities is None:
         flash('Logged in, but unable to load Strava data right now. Please try again shortly.', 'warning')

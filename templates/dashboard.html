@@ -69,6 +69,24 @@
                                             <span class="metric-label">Temperature</span>
                                             <span class="metric-value">{{ activity.average_temp | round(0) if activity.average_temp else 'N/A' }}{% if activity.average_temp %} C{% endif %}</span>
                                         </div>
+                                        <div class="metric-row metric-row-group">
+                                            <span class="metric-label">People in Group</span>
+                                            <span class="metric-value">
+                                                {% if activity.group_people and activity.group_people|length > 0 %}
+                                                    {% for person in activity.group_people %}
+                                                        {% if person.url %}
+                                                            <a class="person-link" href="{{ person.url }}" target="_blank" rel="noopener noreferrer">{{ person.name }}</a>{% if not loop.last %}, {% endif %}
+                                                        {% else %}
+                                                            {{ person.name }}{% if not loop.last %}, {% endif %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% elif activity.athlete_count and activity.athlete_count > 1 %}
+                                                    {{ activity.athlete_count }} athletes (names unavailable from API)
+                                                {% else %}
+                                                    Solo activity
+                                                {% endif %}
+                                            </span>
+                                        </div>
                                     </div>
                                 </details>
                             </li>

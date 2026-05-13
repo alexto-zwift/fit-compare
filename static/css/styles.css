@@ -173,3 +173,17 @@ section p {
     font-weight: 600;
     color: #222;
 }
+
+.metric-row-group {
+    align-items: flex-start;
+}
+
+.person-link {
+    color: #1f5fae;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.person-link:hover {
+    text-decoration: underline;
+}
