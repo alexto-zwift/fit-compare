@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>User Dashboard</title>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Welcome to Your Dashboard</h1>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('home') }}">Home</a></li>
+                    <li><a href="{{ url_for('profile.profile') }}">Profile</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <section>
+                <h2>Your Activities</h2>
+                {% if activities %}
+                    <ul>
+                        {% for activity in activities %}
+                            <li>
+                                <strong>{{ activity.name }}</strong> - {{ activity.distance }} meters
+                                <br>
+                                Date: {{ activity.start_date | date('Y-m-d H:i') }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No activities found.</p>
+                {% endif %}
+            </section>
+        </main>
+        <footer>
+            <p>&copy; {{ current_year }} Fit Compare. All rights reserved.</p>
+        </footer>
+    </div>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

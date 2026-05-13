@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    {% extends 'base.html' %}
+
+    {% block content %}
+    <div class="container">
+        <h1>User Profile</h1>
+        <div class="profile-info">
+            <h2>{{ user.name }}</h2>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Strava ID:</strong> {{ user.strava_id }}</p>
+            <p><strong>Profile Picture:</strong></p>
+            <img src="{{ user.profile_picture }}" alt="Profile Picture" class="profile-pic">
+        </div>
+        <div class="activities">
+            <h3>Recent Activities</h3>
+            <ul>
+                {% for activity in activities %}
+                <li>{{ activity.name }} - {{ activity.distance }} meters</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

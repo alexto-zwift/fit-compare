@@ -1,0 +1,17 @@
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from services.strava_client import get_user_profile
+
+profile_bp = Blueprint('profile', __name__)
+
+@profile_bp.route("/profile")
+def profile():
+    # Check if user is authenticated
+    if 'access_token' not in session:
+        flash('Please log in with Strava first.', 'warning')
+        return redirect(url_for('auth.login'))
+    
+    user_info = get_user_profile()
+    if user_info is None:
+        flash("Unable to fetch user profile information.", "danger")
+        return redirect(url_for('auth.login'))
+    return render_template("profile.html", user=user_info)
