@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, url_for
 from routes.auth import auth_bp
 from routes.dashboard import dashboard_bp
 from routes.profile import profile_bp
@@ -17,6 +17,11 @@ app.register_blueprint(profile_bp)
 @app.route("/")
 def home():
     return render_template("index.html")
+
+
+@app.route("/favicon.ico")
+def favicon_ico():
+    return redirect(url_for('static', filename='favicon.svg'))
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)

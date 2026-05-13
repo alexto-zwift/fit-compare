@@ -1,33 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-</head>
-<body>
-    {% extends 'base.html' %}
+{% extends 'base.html' %}
 
-    {% block content %}
-    <div class="container">
-        <h1>User Profile</h1>
-        <div class="profile-info">
-            <h2>{{ user.name }}</h2>
-            <p><strong>Email:</strong> {{ user.email }}</p>
-            <p><strong>Strava ID:</strong> {{ user.strava_id }}</p>
-            <p><strong>Profile Picture:</strong></p>
-            <img src="{{ user.profile_picture }}" alt="Profile Picture" class="profile-pic">
-        </div>
-        <div class="activities">
-            <h3>Recent Activities</h3>
-            <ul>
-                {% for activity in activities %}
-                <li>{{ activity.name }} - {{ activity.distance }} meters</li>
-                {% endfor %}
-            </ul>
-        </div>
+{% block title %}User Profile{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>User Profile</h1>
+
+    {% if user %}
+    <div class="profile-info card">
+        <h2>{{ user.firstname }} {{ user.lastname }}</h2>
+        <p><strong>Strava ID:</strong> {{ user.id }}</p>
+        <p><strong>Username:</strong> {{ user.username or 'N/A' }}</p>
+        <p><strong>Location:</strong> {{ user.city or 'N/A' }}, {{ user.country or 'N/A' }}</p>
+        {% if user.profile_medium or user.profile %}
+        <p><strong>Profile Picture:</strong></p>
+        <img src="{{ user.profile_medium or user.profile }}" alt="Profile Picture" class="profile-pic">
+        {% endif %}
     </div>
-    {% endblock %}
-</body>
-</html>
+    {% else %}
+    <p>Profile data is currently unavailable.</p>
+    {% endif %}
+</div>
+{% endblock %}
