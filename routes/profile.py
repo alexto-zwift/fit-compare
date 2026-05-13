@@ -6,7 +6,7 @@ profile_bp = Blueprint('profile', __name__)
 @profile_bp.route("/profile")
 def profile():
     # Check if user is authenticated
-    if 'access_token' not in session:
+    if not session.get('access_token'):
         flash('Please log in with Strava first.', 'warning')
         return redirect(url_for('auth.login'))
     
